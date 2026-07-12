@@ -1,26 +1,33 @@
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
-const connectDB = require("./config/db");
+
+// ROUTE IMPORTS
+const authRoutes = require("./routes/authRoutes");
+const esgRoutes = require("./routes/esgRoutes");
+const masterRoutes = require("./routes/masterRoutes");
 
 const app = express();
 
-// Connect to Database
-connectDB();
-
-// Middleware
+// 1. MIDDLEWARES (Essential for API requests & reading JSON body data)
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); 
 
-// Test Route
+// 2. BACKEND STATUS ROADCHECK
 app.get("/", (req, res) => {
-  res.send("🚀 EcoSphere AI Backend is Running...");
+  res.send("EcoSphere ESG Management Platform API is active and running cleanly!");
 });
 
-// Port
-const PORT = process.env.PORT || 5000;
+// 3. API ROUTES MOUNTING
+app.use("/api/auth", authRoutes); // Handles Register & Login
+app.use("/api/esg", esgRoutes);   // Handles ESG Dashboard Metrics
+app.use("/api", masterRoutes);     // Handles Departments & Categories CRUD
 
-// Start Server
+// 4. SERVER START CONFIGURATION
+const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log("---------------------------------------------------------");
+  console.log("🚀 Hackathon Mode: Local In-Memory Database Engine Running");
+  console.log("Database status: Connected to Virtual RAM (Users, Depts, Categories)");
+  console.log("---------------------------------------------------------");
+  console.log(`Server running smoothly on port ${PORT}`);
 });
