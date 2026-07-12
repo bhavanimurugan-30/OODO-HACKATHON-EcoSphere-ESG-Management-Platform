@@ -1,33 +1,49 @@
 const express = require("express");
 const cors = require("cors");
 
-// ROUTE IMPORTS
+// ==========================================
+// ROUTE IMPORTS (Member A + Member B)
+// ==========================================
 const authRoutes = require("./routes/authRoutes");
 const esgRoutes = require("./routes/esgRoutes");
 const masterRoutes = require("./routes/masterRoutes");
+const esgMasterRoutes = require("./routes/esgMasterRoutes"); // Member B's Module
 
 const app = express();
 
-// 1. MIDDLEWARES (Essential for API requests & reading JSON body data)
+// ==========================================
+// GLOBAL MIDDLEWARES
+// ==========================================
 app.use(cors());
 app.use(express.json()); 
 
-// 2. BACKEND STATUS ROADCHECK
+// ==========================================
+// HEALTH ROADCHECK
+// ==========================================
 app.get("/", (req, res) => {
-  res.send("EcoSphere ESG Management Platform API is active and running cleanly!");
+  res.send("EcoSphere ESG Platform Backend is completely active and firing on all cylinders!");
 });
 
-// 3. API ROUTES MOUNTING
-app.use("/api/auth", authRoutes); // Handles Register & Login
-app.use("/api/esg", esgRoutes);   // Handles ESG Dashboard Metrics
-app.use("/api", masterRoutes);     // Handles Departments & Categories CRUD
+// ==========================================
+// API ROUTE MOUNTING
+// ==========================================
+// Member A's Endpoints
+app.use("/api/auth", authRoutes);     // User Reg & Login
+app.use("/api/esg", esgRoutes);       // Dashboard KPI Metrics
+app.use("/api", masterRoutes);         // Departments & Categories CRUD
 
-// 4. SERVER START CONFIGURATION
+// Member B's Endpoints
+app.use("/api/master", esgMasterRoutes); // Employees, Policies, & Emission Factors CRUD
+
+// ==========================================
+// SERVER INITIALIZATION
+// ==========================================
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log("---------------------------------------------------------");
-  console.log("🚀 Hackathon Mode: Local In-Memory Database Engine Running");
-  console.log("Database status: Connected to Virtual RAM (Users, Depts, Categories)");
-  console.log("---------------------------------------------------------");
-  console.log(`Server running smoothly on port ${PORT}`);
+  console.log("=========================================================");
+  console.log("🚀 HACKATHON CORE BOOTED SUCCESSFULLY");
+  console.log("Database Connection: In-Memory Virtual RAM Active");
+  console.log("Listening for endpoints on standard Port: " + PORT);
+  console.log("=========================================================");
+  console.log("🟢 All Member A and Member B routes mounted correctly.");
 });
